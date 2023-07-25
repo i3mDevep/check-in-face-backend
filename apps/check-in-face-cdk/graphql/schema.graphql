@@ -1,0 +1,50 @@
+type Worker {
+  fullName: String!
+  identification: ID!
+  profilePath: String
+  created: String
+  modified: String
+  entity: String
+}
+
+type WorkerImage {
+  pathFaceInCollection: String
+  identification: String
+  collectionId: String
+  faceId: String
+  created: String
+  modified: String
+  entity: String
+}
+
+type WorkerImagesKeys {
+  identification: ID!
+  faceIds: [String]
+}
+
+input WorkerInput {
+  fullName: String!
+  identification: ID!
+  profilePath: String
+}
+
+input DeleteWorkerImagesInput {
+  identification: ID!
+  faceIds: [String]
+}
+
+type Query {
+  getWorkerDetail(identification: ID!): Worker
+  getWorkerImages(identification: ID!): [WorkerImage]
+  getListWorker: [Worker]
+}
+
+type Mutation {
+  putWorker(props: WorkerInput): Worker!
+  deleteWorkerImages(props: DeleteWorkerImagesInput): WorkerImagesKeys
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
