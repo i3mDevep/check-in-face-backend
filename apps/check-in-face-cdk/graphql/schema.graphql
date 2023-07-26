@@ -33,6 +33,10 @@ input DeleteWorkerImagesInput {
   faceIds: [String]
 }
 
+input MarkRecordWorkerInput {
+  imageKey: String!
+}
+
 type Query {
   getWorkerDetail(identification: ID!): Worker
   getWorkerImages(identification: ID!): [WorkerImage]
@@ -42,6 +46,7 @@ type Query {
 type Mutation {
   putWorker(props: WorkerInput): Worker!
   deleteWorkerImages(props: DeleteWorkerImagesInput): WorkerImagesKeys
+  markRecordWorker(props: MarkRecordWorkerInput): String
 }
 
 schema {

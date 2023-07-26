@@ -12,7 +12,7 @@ export const handler: Handler<S3Event> = async (event, _, callback) => {
   const facesIdSuccess: Record<string, string[]> = {};
 
   const promises = event.Records.flatMap(async (record) => {
-    const [identification] = record.s3.object.key.split('/');
+    const [, identification] = record.s3.object.key.split('/');
     if (!identification) return [];
 
     const response = await indexFaces({
@@ -35,7 +35,8 @@ export const handler: Handler<S3Event> = async (event, _, callback) => {
       return [];
 
     const faceId = response.FaceRecords[0].Face.FaceId;
-    (facesIdSuccess?.[identification] ?? []).push(faceId);
+    const passFaceIds = facesIdSuccess?.[identification] ?? [];
+    facesIdSuccess[identification] = passFaceIds.concat(faceId);
 
     return await workerImagesEntity.put({
       collectionId: COLLECTION_ID,

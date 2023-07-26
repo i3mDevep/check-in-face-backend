@@ -60,6 +60,13 @@
         "command": "cd apps/check-in-face-cdk && cdk deploy"
       }
     },
+    "synth": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "cd apps/check-in-face-cdk && cdk synth"
+      }
+    },
     "destroy": {
       "executor": "nx:run-commands",
       "options": {

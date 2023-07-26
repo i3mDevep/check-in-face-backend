@@ -110,6 +110,11 @@ export class CheckInFaceStatefulStack extends cdk.Stack {
     lambdaEventLoadImagesWorker.addEventSource(
       new lambdaSource.S3EventSource(this.imagesWorkerS3, {
         events: [cdk.aws_s3.EventType.OBJECT_CREATED],
+        filters: [
+          {
+            prefix: 'collection-images/',
+          },
+        ],
       })
     );
 
