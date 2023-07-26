@@ -98,6 +98,7 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
     // Permission //
 
     imagesWorkerS3.grantReadWrite(lambdaMarkRecordWorker);
+    tableCheckInFace.grantReadWriteData(lambdaMarkRecordWorker);
     tableCheckInFace.grantReadWriteData(lambdaDeleteWorkerImages);
     tableCheckInFace.grantReadWriteData(lambdaCreateWorker);
     tableCheckInFace.grantReadWriteData(lambdaListWorker);

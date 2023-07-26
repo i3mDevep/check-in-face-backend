@@ -34,7 +34,9 @@ input DeleteWorkerImagesInput {
 }
 
 input MarkRecordWorkerInput {
+  dateRegister: String!
   imageKey: String!
+  reason: String!
 }
 
 type Query {
@@ -46,7 +48,7 @@ type Query {
 type Mutation {
   putWorker(props: WorkerInput): Worker!
   deleteWorkerImages(props: DeleteWorkerImagesInput): WorkerImagesKeys
-  markRecordWorker(props: MarkRecordWorkerInput): String
+  markRecordWorker(props: MarkRecordWorkerInput): Worker
 }
 
 schema {

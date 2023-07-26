@@ -1,14 +1,16 @@
 import {
   workerEntity,
   workerImagesEntity,
+  workerTimelineEntity,
   CHECK_IN_FACE_KEYS,
+  createPkWorkerTimeline,
 } from '../src/shared/infrastructure/persistence';
 
 const { identification, worker, faceId } = CHECK_IN_FACE_KEYS;
 
 const workerMock = {
   fullName: 'User Mock',
-  identification: '1017250202',
+  identification: 'identification_mock_fake',
   info: { email: 'mocker@gmail.com' },
 };
 
@@ -17,6 +19,12 @@ const workerImage = {
   collectionId: 'images-worker',
   identification: workerMock.identification,
   pathFaceInCollection: '/image/1',
+};
+
+const workerTimeline = {
+  dateRegister: new Date().toISOString(),
+  identification: 'identification_mock_fake',
+  reason: 'LAUNCH',
 };
 describe('checkInFaceShared', () => {
   describe('workerEntity', () => {
@@ -97,6 +105,28 @@ describe('checkInFaceShared', () => {
         }
       );
       expect(Number(Items?.length) >= 1).toBe(true);
+    });
+  });
+
+  describe('workerTimeline', () => {
+    beforeAll(async () => {
+      await workerTimelineEntity.put(workerTimeline);
+    });
+    afterAll(async () => {
+      await workerTimelineEntity.delete({
+        identification: workerTimeline.identification,
+        dateRegister: workerTimeline.dateRegister,
+      });
+    });
+    it('should get list worker for month', async () => {
+      const { Items } = await workerImagesEntity.query(
+        createPkWorkerTimeline(
+          workerTimeline.identification,
+          new Date().toISOString()
+        )
+      );
+
+      expect(Items?.length).toEqual(1);
     });
   });
 });

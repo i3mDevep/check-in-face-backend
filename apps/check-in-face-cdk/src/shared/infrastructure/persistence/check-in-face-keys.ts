@@ -4,7 +4,7 @@ export enum CHECK_IN_FACE_KEYS {
   year = 'YEAR',
   month = 'MONTH',
   day = 'DAY',
-  hour = 'HOUR',
+  date = 'DATE',
   faceId = 'FACE',
 }
 
