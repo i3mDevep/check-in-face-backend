@@ -9,9 +9,9 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 
 import { Construct } from 'constructs';
-import { PropsBase } from '../types/props-base';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as cloudfront_origins from 'aws-cdk-lib/aws-cloudfront-origins';
+import { PropsBase } from '../types/props-base';
 
 export class CheckInFaceStatefulStack extends cdk.Stack {
   public readonly checkInFaceTable: dynamodb.Table;

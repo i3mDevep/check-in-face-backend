@@ -3,7 +3,7 @@ import {
   workerImagesEntity,
   workerTimelineEntity,
   CHECK_IN_FACE_KEYS,
-  createPkWorkerTimeline,
+  buildPKWorkerTimelineWithDateRegister,
 } from '../src/shared/infrastructure/persistence';
 
 const { identification, worker, faceId } = CHECK_IN_FACE_KEYS;
@@ -120,7 +120,7 @@ describe('checkInFaceShared', () => {
     });
     it('should get list worker for month', async () => {
       const { Items } = await workerImagesEntity.query(
-        createPkWorkerTimeline(
+        buildPKWorkerTimelineWithDateRegister(
           workerTimeline.identification,
           new Date().toISOString()
         )

@@ -95,9 +95,18 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
       stage,
     });
 
+    const lambdaListMarkTimeWorker = this.createLambdaNodeJSBase({
+      functionName: 'list-mark-time-worker-handler',
+      routePath: 'lambdas/list-mark-time-worker-handler/index.js',
+      environment: commonEnvironment,
+      stage,
+    });
+
     // Permission //
 
     imagesWorkerS3.grantReadWrite(lambdaMarkRecordWorker);
+
+    tableCheckInFace.grantReadWriteData(lambdaListMarkTimeWorker);
     tableCheckInFace.grantReadWriteData(lambdaMarkRecordWorker);
     tableCheckInFace.grantReadWriteData(lambdaDeleteWorkerImages);
     tableCheckInFace.grantReadWriteData(lambdaCreateWorker);
@@ -158,6 +167,12 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
       id: 'delete-worker-images',
       lambdaHandler: lambdaDeleteWorkerImages,
       resolverProps: { typeName: 'Mutation', fieldName: 'deleteWorkerImages' },
+    });
+
+    this.createLambdaResolver({
+      id: 'list-mark-time-worker',
+      lambdaHandler: lambdaListMarkTimeWorker,
+      resolverProps: { typeName: 'Query', fieldName: 'getListWorkerMarkTime' },
     });
 
     new cdk.CfnOutput(

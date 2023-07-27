@@ -1,18 +1,26 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Entity, Table } from 'dynamodb-toolbox';
 import { checkInFaceTable } from './check-in-face-table';
 import { CHECK_IN_FACE_KEYS } from './check-in-face-keys';
 
 const { identification, year, date: dateKey, month, day } = CHECK_IN_FACE_KEYS;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 type ItemsType = Record<any, string>;
 
-export const createPkWorkerTimeline = (
+export const buildPKWorkerTimelineWithDateRegister = (
   identification_: string,
   dateRegister: string
 ) => {
   const date = new Date(dateRegister);
   return `${identification}#${identification_}#${year}#${date.getFullYear()}#${month}#${date.getMonth()}`;
 };
+
+export const buildPKWorkerTimelineWithManual = (
+  identification_: string,
+  year_: string,
+  month_: string
+) => `${identification}#${identification_}#${year}#${year_}#${month}#${month_}`;
 
 export const generateWorkerTimelineEntity = <
   T extends Table<string, 'pk', 'sk'>
@@ -28,7 +36,10 @@ export const generateWorkerTimelineEntity = <
         dependsOn: ['dateRegister', 'identification'],
         type: 'string',
         default: (items: ItemsType) =>
-          createPkWorkerTimeline(items?.identification, items?.dateRegister),
+          buildPKWorkerTimelineWithDateRegister(
+            items?.identification,
+            items?.dateRegister
+          ),
       },
       sk: {
         sortKey: true,

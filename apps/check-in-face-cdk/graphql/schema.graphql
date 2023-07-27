@@ -17,9 +17,25 @@ type WorkerImage {
   entity: String
 }
 
+type WorkerMarkTime {
+  dateRegister: String
+  identification: String
+  reason: String
+  created: String
+  modified: String
+  entity: String
+}
+
 type WorkerImagesKeys {
   identification: ID!
   faceIds: [String]
+}
+
+input WorkerMarkTimeQuery {
+  identification: String!
+  year: String!
+  month: String!
+  day: String
 }
 
 input WorkerInput {
@@ -40,6 +56,7 @@ input MarkRecordWorkerInput {
 }
 
 type Query {
+  getListWorkerMarkTime(query: WorkerMarkTimeQuery!): [WorkerMarkTime]
   getWorkerDetail(identification: ID!): Worker
   getWorkerImages(identification: ID!): [WorkerImage]
   getListWorker: [Worker]
