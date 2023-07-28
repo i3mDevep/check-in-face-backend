@@ -4,6 +4,11 @@ npx cdk init app --language=typescript
 --exclusively
 
 pnpm nx run check-in-face-cdk:deploy --exclusively check-in-face-stateless --require-approval never
+pnpm nx run check-in-face-cdk:deploy --all --require-approval never
+
+aws rekognition list-faces --collection-id collection-worker-faces-dev
+aws rekognition create-collection --collection-id collection-worker-faces-dev
+aws rekognition delete-collection --collection-id collection-worker-faces-dev
 
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 

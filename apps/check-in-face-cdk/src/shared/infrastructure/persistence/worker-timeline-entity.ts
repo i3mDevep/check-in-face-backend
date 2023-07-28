@@ -8,12 +8,23 @@ const { identification, year, date: dateKey, month, day } = CHECK_IN_FACE_KEYS;
 
 type ItemsType = Record<any, string>;
 
+const TIME_ZONE_APP = -5;
+
 export const buildPKWorkerTimelineWithDateRegister = (
   identification_: string,
   dateRegister: string
 ) => {
   const date = new Date(dateRegister);
+  //ISSUE [1] timezone app it is not fixed
+  date.setHours(date.getHours() + TIME_ZONE_APP);
   return `${identification}#${identification_}#${year}#${date.getFullYear()}#${month}#${date.getMonth()}`;
+};
+
+export const buildSKWorkerTimelineWithDateRegister = (items: ItemsType) => {
+  const date = new Date(items?.dateRegister);
+  //ISSUE [2] timezone app it is not fixed
+  date.setHours(date.getHours() + TIME_ZONE_APP);
+  return `${day}#${date.getDate()}#${dateKey}#${date.getTime()}`;
 };
 
 export const buildPKWorkerTimelineWithManual = (
@@ -46,14 +57,12 @@ export const generateWorkerTimelineEntity = <
         hidden: true,
         dependsOn: ['dateRegister'],
         type: 'string',
-        default: (items: ItemsType) => {
-          const date = new Date(items?.dateRegister);
-          return `${day}#${date.getDate()}#${dateKey}#${date.getTime()}`;
-        },
+        default: buildSKWorkerTimelineWithDateRegister,
       },
       identification: { type: 'string', required: true },
       dateRegister: { type: 'string', required: true },
       reason: { type: 'string', required: true },
+      picture: { type: 'string', required: true },
     },
     table,
   } as const);

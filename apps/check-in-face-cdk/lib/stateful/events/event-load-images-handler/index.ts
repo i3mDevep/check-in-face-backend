@@ -43,6 +43,7 @@ export const handler: Handler<S3Event> = async (event, _, callback) => {
       identification,
       faceId,
       pathFaceInCollection: record.s3.object.key,
+      status: 'associated',
     });
   });
 

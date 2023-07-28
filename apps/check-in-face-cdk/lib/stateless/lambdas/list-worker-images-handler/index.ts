@@ -17,6 +17,10 @@ export const handler: AppSyncResolverHandler<
       `${identification}#${event.arguments.identification}`,
       {
         beginsWith: `${faceId}`,
+        filters: {
+          attr: 'status',
+          eq: 'associated',
+        },
       }
     );
     return Items;

@@ -19,12 +19,14 @@ const workerImage = {
   collectionId: 'images-worker',
   identification: workerMock.identification,
   pathFaceInCollection: '/image/1',
+  status: 'associated',
 };
 
 const workerTimeline = {
   dateRegister: new Date().toISOString(),
   identification: 'identification_mock_fake',
   reason: 'LAUNCH',
+  picture: '/time-line/0191',
 };
 describe('checkInFaceShared', () => {
   describe('workerEntity', () => {

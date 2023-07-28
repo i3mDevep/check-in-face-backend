@@ -81,9 +81,9 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
       stage,
     });
 
-    const lambdaDeleteWorkerImages = this.createLambdaNodeJSBase({
-      functionName: 'delete-worker-image-handler',
-      routePath: 'lambdas/delete-worker-image-handler/index.js',
+    const lambdaDisassociateWorkerImages = this.createLambdaNodeJSBase({
+      functionName: 'disassociate-worker-image-handler',
+      routePath: 'lambdas/disassociate-worker-image-handler/index.js',
       environment: commonEnvironment,
       stage,
     });
@@ -108,7 +108,7 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
 
     tableCheckInFace.grantReadWriteData(lambdaListMarkTimeWorker);
     tableCheckInFace.grantReadWriteData(lambdaMarkRecordWorker);
-    tableCheckInFace.grantReadWriteData(lambdaDeleteWorkerImages);
+    tableCheckInFace.grantReadWriteData(lambdaDisassociateWorkerImages);
     tableCheckInFace.grantReadWriteData(lambdaCreateWorker);
     tableCheckInFace.grantReadWriteData(lambdaListWorker);
     tableCheckInFace.grantReadWriteData(lambdaListWorkerImages);
@@ -129,10 +129,10 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
       })
     );
 
-    lambdaDeleteWorkerImages.addToRolePolicy(
+    lambdaDisassociateWorkerImages.addToRolePolicy(
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
-        actions: ['rekognition:DeleteFaces'],
+        actions: ['rekognition:DisassociateFaces'],
         resources: ['*'],
       })
     );
@@ -164,9 +164,12 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
     });
 
     this.createLambdaResolver({
-      id: 'delete-worker-images',
-      lambdaHandler: lambdaDeleteWorkerImages,
-      resolverProps: { typeName: 'Mutation', fieldName: 'deleteWorkerImages' },
+      id: 'disassociate-worker-images',
+      lambdaHandler: lambdaDisassociateWorkerImages,
+      resolverProps: {
+        typeName: 'Mutation',
+        fieldName: 'disassociateWorkerImages',
+      },
     });
 
     this.createLambdaResolver({

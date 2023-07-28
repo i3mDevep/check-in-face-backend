@@ -12,15 +12,17 @@ type WorkerImage {
   identification: String
   collectionId: String
   faceId: String
+  status: String
   created: String
   modified: String
   entity: String
 }
 
 type WorkerMarkTime {
-  dateRegister: String
-  identification: String
-  reason: String
+  dateRegister: String!
+  identification: String!
+  reason: String!
+  picture: String
   created: String
   modified: String
   entity: String
@@ -44,7 +46,7 @@ input WorkerInput {
   profilePath: String
 }
 
-input DeleteWorkerImagesInput {
+input DisassociateWorkerImagesInput {
   identification: ID!
   faceIds: [String]
 }
@@ -64,7 +66,7 @@ type Query {
 
 type Mutation {
   putWorker(props: WorkerInput): Worker!
-  deleteWorkerImages(props: DeleteWorkerImagesInput): WorkerImagesKeys
+  disassociateWorkerImages(props: DisassociateWorkerImagesInput): Boolean
   markRecordWorker(props: MarkRecordWorkerInput): Worker
 }
 

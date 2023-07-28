@@ -30,6 +30,7 @@ export const generateWorkerImagesEntity = <T extends Table<string, 'pk', 'sk'>>(
       faceId: { type: 'string', required: true },
       identification: { type: 'string', required: true },
       collectionId: { type: 'string', required: true },
+      status: { type: 'string', required: true },
       pathFaceInCollection: { type: 'string', required: true },
     },
     table,

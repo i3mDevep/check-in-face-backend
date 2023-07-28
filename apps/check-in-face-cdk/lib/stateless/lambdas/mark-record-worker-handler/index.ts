@@ -56,6 +56,7 @@ export const handler: AppSyncResolverHandler<
       identification: userFind.User.UserId,
       dateRegister,
       reason,
+      picture: imageKey,
     });
 
     return Item;
