@@ -6,6 +6,7 @@ import {
   buildPKWorkerTimelineWithDateRegister,
 } from '../src/shared/infrastructure/persistence';
 
+import { workerTracerTimeType } from '../src/worker/domain/worker-tracer-time-type';
 const { identification, worker, faceId } = CHECK_IN_FACE_KEYS;
 
 const workerMock = {
@@ -22,12 +23,24 @@ const workerImage = {
   status: 'associated',
 };
 
-const workerTimeline = {
-  dateRegister: new Date().toISOString(),
-  identification: 'identification_mock_fake',
-  reason: 'LAUNCH',
-  picture: '/time-line/0191',
-};
+const DateOut = new Date();
+DateOut.setHours(DateOut.getHours() + 1);
+const workerTimeline = [
+  {
+    dateRegister: new Date().toISOString(),
+    identification: 'identification_mock_fake',
+    reason: 'start work',
+    picture: '/time-line/0191',
+    type: workerTracerTimeType.IN,
+  },
+  {
+    dateRegister: DateOut.toISOString(),
+    identification: 'identification_mock_fake',
+    reason: 'end',
+    picture: '/time-line/0191',
+    type: workerTracerTimeType.OUT,
+  },
+];
 describe('checkInFaceShared', () => {
   describe('workerEntity', () => {
     beforeAll(async () => {
@@ -112,23 +125,41 @@ describe('checkInFaceShared', () => {
 
   describe('workerTimeline', () => {
     beforeAll(async () => {
-      await workerTimelineEntity.put(workerTimeline);
+      await workerTimelineEntity.put(workerTimeline[0]);
+      await workerTimelineEntity.put(workerTimeline[1]);
     });
     afterAll(async () => {
       await workerTimelineEntity.delete({
-        identification: workerTimeline.identification,
-        dateRegister: workerTimeline.dateRegister,
+        identification: workerTimeline[0].identification,
+        dateRegister: workerTimeline[0].dateRegister,
+      });
+      await workerTimelineEntity.delete({
+        identification: workerTimeline[1].identification,
+        dateRegister: workerTimeline[1].dateRegister,
       });
     });
     it('should get list worker for month', async () => {
-      const { Items } = await workerImagesEntity.query(
+      const { Items } = await workerTimelineEntity.query(
         buildPKWorkerTimelineWithDateRegister(
-          workerTimeline.identification,
+          workerTimeline[0].identification,
           new Date().toISOString()
         )
       );
 
+      expect(Items?.length).toEqual(2);
+    });
+
+    it('should get list worker with limit 1', async () => {
+      const { Items } = await workerTimelineEntity.query(
+        buildPKWorkerTimelineWithDateRegister(
+          workerTimeline[0].identification,
+          new Date().toISOString()
+        ),
+        { limit: 1, reverse: true }
+      );
+
       expect(Items?.length).toEqual(1);
+      expect(Items?.[0].type).toEqual('out');
     });
   });
 });

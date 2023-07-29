@@ -2,9 +2,14 @@ import { AppSyncResolverHandler } from 'aws-lambda';
 import { searchUserWithFace } from '../../../../src/shared/infrastructure/rekognition/search-user-with-face';
 import {
   GeneralFacet,
+  buildPKWorkerTimelineWithDateRegister,
   workerEntity,
   workerTimelineEntity,
 } from '../../../../src/shared/infrastructure/persistence';
+import {
+  ErrorCouldNotFindFace,
+  ErrorTracerRegisterType,
+} from '../../../../src/worker/domain/worker-error';
 
 type ResponseWorker = GeneralFacet<typeof workerEntity>;
 
@@ -13,6 +18,7 @@ type MarkRecordWorkerInput = {
     imageKey: string;
     dateRegister: string;
     reason: string;
+    type: string;
   };
 };
 
@@ -22,45 +28,52 @@ export const handler: AppSyncResolverHandler<
 > = async (event) => {
   const {
     arguments: {
-      props: { imageKey, dateRegister, reason },
+      props: { imageKey, dateRegister, reason, type },
     },
   } = event;
 
   if (!process.env.CF_COLLECTION_ID) return;
 
-  try {
-    const users = await searchUserWithFace({
-      CollectionId: process.env.CF_COLLECTION_ID,
-      MaxUsers: 1,
-      Image: {
-        S3Object: {
-          Bucket: process.env.CF_LOAD_IMAGES_WORKER_BUCKET_NAME,
-          Name: imageKey,
-        },
+  const users = await searchUserWithFace({
+    CollectionId: process.env.CF_COLLECTION_ID,
+    MaxUsers: 1,
+    Image: {
+      S3Object: {
+        Bucket: process.env.CF_LOAD_IMAGES_WORKER_BUCKET_NAME,
+        Name: imageKey,
       },
-    });
+    },
+  });
 
-    if (!users.UserMatches?.length) return { error: 'did not find user' };
+  if (!users.UserMatches?.length) throw new ErrorCouldNotFindFace();
 
-    const [userFind] = users.UserMatches;
+  const [userFind] = users.UserMatches;
 
-    if (!userFind.User?.UserId) return { error: 'user id is undefine' };
+  if (!userFind.User?.UserId) throw new ErrorCouldNotFindFace();
 
-    const { Item } = await workerEntity.get({
-      identification: userFind.User.UserId,
-    });
+  const { Item } = await workerEntity.get({
+    identification: userFind.User.UserId,
+  });
 
-    if (!Item) return { error: 'did not find user' };
+  if (!Item) throw new ErrorCouldNotFindFace();
 
-    await workerTimelineEntity.put({
-      identification: userFind.User.UserId,
-      dateRegister,
-      reason,
-      picture: imageKey,
-    });
+  const { Items } = await workerTimelineEntity.query(
+    buildPKWorkerTimelineWithDateRegister(userFind.User.UserId, dateRegister),
+    { limit: 1, reverse: true }
+  );
 
-    return Item;
-  } catch (error) {
-    return error;
-  }
+  const prevDataMarkTimeRecord = Items?.[0];
+
+  if (prevDataMarkTimeRecord && prevDataMarkTimeRecord.type === type)
+    throw new ErrorTracerRegisterType(type);
+
+  await workerTimelineEntity.put({
+    type,
+    identification: userFind.User.UserId,
+    dateRegister,
+    reason,
+    picture: imageKey,
+  });
+
+  return Item;
 };

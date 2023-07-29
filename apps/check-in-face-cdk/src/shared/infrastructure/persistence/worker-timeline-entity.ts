@@ -63,6 +63,7 @@ export const generateWorkerTimelineEntity = <
       dateRegister: { type: 'string', required: true },
       reason: { type: 'string', required: true },
       picture: { type: 'string', required: true },
+      type: { type: 'string', required: true },
     },
     table,
   } as const);

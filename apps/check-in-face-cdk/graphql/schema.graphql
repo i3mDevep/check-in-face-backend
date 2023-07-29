@@ -1,6 +1,6 @@
 type Worker {
-  fullName: String!
-  identification: ID!
+  fullName: String
+  identification: ID
   profilePath: String
   created: String
   modified: String
@@ -19,9 +19,10 @@ type WorkerImage {
 }
 
 type WorkerMarkTime {
-  dateRegister: String!
-  identification: String!
-  reason: String!
+  dateRegister: String
+  identification: String
+  reason: String
+  type: String
   picture: String
   created: String
   modified: String
@@ -55,6 +56,7 @@ input MarkRecordWorkerInput {
   dateRegister: String!
   imageKey: String!
   reason: String!
+  type: String!
 }
 
 type Query {

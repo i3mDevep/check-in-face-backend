@@ -26,7 +26,7 @@ export const handler: AppSyncResolverHandler<
     const options = day ? { beginsWith: `${dayKey}#${day}` } : undefined;
     const { Items } = await workerTimelineEntity.query(
       buildPKWorkerTimelineWithManual(identification, year, month),
-      options
+      { ...options, reverse: true }
     );
 
     return Items;
