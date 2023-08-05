@@ -39,6 +39,8 @@ input WorkerMarkTimeQuery {
   year: String!
   month: String!
   day: String
+  limit: Int
+  reverse: Boolean
 }
 
 input WorkerInput {

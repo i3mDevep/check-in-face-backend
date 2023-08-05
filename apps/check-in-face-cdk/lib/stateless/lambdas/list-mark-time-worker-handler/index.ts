@@ -17,16 +17,20 @@ export const handler: AppSyncResolverHandler<
       year: string;
       month: string;
       day?: string;
+      limit?: number;
+      reverse?: boolean;
     };
   },
   ResponseWorkerTimeline[] | undefined
 > = async (event) => {
-  const { identification, month, year, day } = event.arguments.query;
+  const { identification, month, year, day, limit, reverse } =
+    event.arguments.query;
   try {
     const options = day ? { beginsWith: `${dayKey}#${day}` } : undefined;
+
     const { Items } = await workerTimelineEntity.query(
       buildPKWorkerTimelineWithManual(identification, year, month),
-      { ...options, reverse: true }
+      { ...options, reverse: reverse ?? true, limit }
     );
 
     return Items;
