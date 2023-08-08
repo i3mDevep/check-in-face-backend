@@ -51,6 +51,13 @@ export class ClientAppStack extends cdk.Stack {
             cloud_front.ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS,
         },
         additionalBehaviors: {},
+        errorResponses: [
+          {
+            httpStatus: 403,
+            responseHttpStatus: 200,
+            responsePagePath: '/index.html',
+          },
+        ],
       }
     );
 
