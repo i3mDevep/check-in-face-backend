@@ -19,6 +19,7 @@ type MarkRecordWorkerInput = {
     dateRegister: string;
     reason: string;
     type: string;
+    force?: boolean;
   };
 };
 
@@ -28,11 +29,25 @@ export const handler: AppSyncResolverHandler<
 > = async (event) => {
   const {
     arguments: {
-      props: { imageKey, dateRegister, reason, type },
+      props: { imageKey, dateRegister, reason, type, force },
     },
   } = event;
 
   if (!process.env.CF_COLLECTION_ID) return;
+  if (force) {
+    const { Item } = await workerEntity.get({
+      identification: imageKey,
+    });
+
+    await workerTimelineEntity.put({
+      type,
+      identification: imageKey,
+      dateRegister,
+      reason,
+      picture: '',
+    });
+    return Item;
+  }
 
   const users = await searchUserWithFace({
     CollectionId: process.env.CF_COLLECTION_ID,

@@ -7,35 +7,30 @@ type CreateWorkerInput = {
     fullName: string;
     identification: string;
     profilePath?: string;
+    isPatch?: boolean;
   };
 };
 
 export const handler: AppSyncResolverHandler<
   CreateWorkerInput,
-  Partial<CreateWorkerInput['props']> | undefined
+  boolean
 > = async (event) => {
-  try {
-    if (!process.env.CF_COLLECTION_ID)
-      throw new Error('CF_COLLECTION_ID undefine');
+  if (!process.env.CF_COLLECTION_ID)
+    throw new Error('CF_COLLECTION_ID undefine');
 
-    await workerEntity.put(
-      {
-        identification: event.arguments.props.identification,
-        fullName: event.arguments.props.fullName,
-        profilePath: event.arguments.props?.profilePath,
-      },
-      { conditions: [{ attr: 'identification', exists: false }] }
-    );
-
-    await createUser(
-      process.env.CF_COLLECTION_ID,
-      event.arguments.props.identification
-    );
-
-    return {
-      ...event.arguments.props,
-    };
-  } catch (error) {
-    return undefined;
+  const { isPatch, ...rest } = event.arguments.props;
+  if (isPatch) {
+    await workerEntity.update(rest);
+    return true;
   }
+
+  await workerEntity.put(rest, {
+    conditions: [{ attr: 'identification', exists: false }],
+  });
+
+  await createUser(
+    process.env.CF_COLLECTION_ID,
+    event.arguments.props.identification
+  );
+  return true;
 };

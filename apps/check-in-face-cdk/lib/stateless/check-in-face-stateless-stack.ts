@@ -53,6 +53,14 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
       logConfig: {
         fieldLogLevel: appsync.FieldLogLevel.ALL,
       },
+      authorizationConfig: {
+        defaultAuthorization: {
+          authorizationType: cdk.aws_appsync.AuthorizationType.API_KEY,
+          apiKeyConfig: {
+            expires: cdk.Expiration.after(cdk.Duration.days(365)),
+          },
+        },
+      },
       schema: appsync.SchemaFile.fromAsset(
         path.join(__dirname, '../../../../graphql/', 'schema.graphql')
       ),
@@ -63,6 +71,13 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
     const lambdaListWorker = this.createLambdaNodeJSBase({
       functionName: 'list-worker-handler',
       routePath: 'lambdas/list-worker-handler/index.js',
+      environment: commonEnvironment,
+      stage,
+    });
+
+    const lambdaDetailWorker = this.createLambdaNodeJSBase({
+      functionName: 'get-detail-worker-handler',
+      routePath: 'lambdas/get-detail-worker-handler/index.js',
       environment: commonEnvironment,
       stage,
     });
@@ -112,6 +127,7 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
     tableCheckInFace.grantReadWriteData(lambdaCreateWorker);
     tableCheckInFace.grantReadWriteData(lambdaListWorker);
     tableCheckInFace.grantReadWriteData(lambdaListWorkerImages);
+    tableCheckInFace.grantReadData(lambdaDetailWorker);
 
     lambdaCreateWorker.addToRolePolicy(
       new iam.PolicyStatement({
@@ -146,6 +162,12 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
     });
 
     this.createLambdaResolver({
+      id: 'get-detail-worker',
+      lambdaHandler: lambdaDetailWorker,
+      resolverProps: { typeName: 'Query', fieldName: 'getDetailWorker' },
+    });
+
+    this.createLambdaResolver({
       id: 'get-list-worker',
       lambdaHandler: lambdaListWorker,
       resolverProps: { typeName: 'Query', fieldName: 'getListWorker' },
@@ -176,6 +198,10 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
       id: 'list-mark-time-worker',
       lambdaHandler: lambdaListMarkTimeWorker,
       resolverProps: { typeName: 'Query', fieldName: 'getListWorkerMarkTime' },
+    });
+
+    new cdk.CfnOutput(this, this.builderId.assignedIdResource('out-api-key'), {
+      value: this.appsyncApi.apiKey ?? 'non-key',
     });
 
     new cdk.CfnOutput(

@@ -44,9 +44,10 @@ input WorkerMarkTimeQuery {
 }
 
 input WorkerInput {
-  fullName: String!
+  fullName: String
   identification: ID!
   profilePath: String
+  isPatch: Boolean
 }
 
 input DisassociateWorkerImagesInput {
@@ -59,17 +60,18 @@ input MarkRecordWorkerInput {
   imageKey: String!
   reason: String!
   type: String!
+  force: Boolean
 }
 
 type Query {
   getListWorkerMarkTime(query: WorkerMarkTimeQuery!): [WorkerMarkTime]
-  getWorkerDetail(identification: ID!): Worker
   getWorkerImages(identification: ID!): [WorkerImage]
+  getDetailWorker(identification: ID!): Worker
   getListWorker: [Worker]
 }
 
 type Mutation {
-  putWorker(props: WorkerInput): Worker!
+  putWorker(props: WorkerInput): Boolean
   disassociateWorkerImages(props: DisassociateWorkerImagesInput): Boolean
   markRecordWorker(props: MarkRecordWorkerInput): Worker
 }
