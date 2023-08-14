@@ -40,6 +40,14 @@ The goal of this project is to create a system that allows employees to clock in
 
 1. Install AWS CLI and configure your AWS credentials.
 2. Use `pnpm nx run check-in-face-cdk:deploy --all --require-approval never`.
+   
+## CfnOutput Descriptions
+
+- `out-api-key`: The API key generated for AWS AppSync. This key can be used for authorization when interacting with the GraphQL API.
+- `out-graphql-url`: The URL for the AWS AppSync GraphQL endpoint. This URL is used to make GraphQL queries and mutations.
+- `out-images-worker-s3-bucket`: The name of the Amazon S3 bucket used to store worker images.
+- `out-images-worker-cdn`: The domain name of the CloudFront distribution used for efficient delivery of worker images.
+
 
 ## Conclusion
 
