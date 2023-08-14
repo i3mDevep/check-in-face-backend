@@ -74,7 +74,7 @@ export const handler: AppSyncResolverHandler<
 
   const { Items } = await workerTimelineEntity.query(
     buildPKWorkerTimelineWithDateRegister(userFind.User.UserId, dateRegister),
-    { limit: 1, reverse: true }
+    { limit: 1, reverse: false }
   );
 
   const prevDataMarkTimeRecord = Items?.[0];
