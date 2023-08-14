@@ -53,5 +53,3 @@ The goal of this project is to create a system that allows employees to clock in
 
 This project demonstrates the power of serverless architecture combined with Amazon Rekognition to create an innovative solution for employee time tracking. Feel free to explore and expand upon this project to suit your specific requirements.
 
-For detailed instructions, refer to the README within each stack's directory.
-
