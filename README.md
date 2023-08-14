@@ -2,6 +2,8 @@
 
 This project demonstrates a serverless employee time tracking system using Amazon Rekognition, part of the Amazon Web Services (AWS) ecosystem. The application captures employee check-ins through facial recognition and stores the relevant data in a serverless manner using various AWS services.
 
+![alt text](https://github.com/i3mDevep/check-in-face-backend/blob/main/assets/arquitecture-check-in-face.svg?raw=true)
+
 ## Project Overview
 
 The goal of this project is to create a system that allows employees to clock in and out by having their faces recognized. The system utilizes AWS Rekognition, a machine learning service, to perform facial recognition on images captured during check-ins.
