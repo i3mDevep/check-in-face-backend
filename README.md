@@ -2,6 +2,8 @@
 
 This project demonstrates a serverless employee time tracking system using Amazon Rekognition, part of the Amazon Web Services (AWS) ecosystem. The application captures employee check-ins through facial recognition and stores the relevant data in a serverless manner using various AWS services.
 
+![alt text](https://github.com/i3mDevep/check-in-face-backend/blob/main/assets/arquitecture-check-in-face.svg?raw=true)
+
 ## Project Overview
 
 The goal of this project is to create a system that allows employees to clock in and out by having their faces recognized. The system utilizes AWS Rekognition, a machine learning service, to perform facial recognition on images captured during check-ins.
@@ -38,10 +40,16 @@ The goal of this project is to create a system that allows employees to clock in
 
 1. Install AWS CLI and configure your AWS credentials.
 2. Use `pnpm nx run check-in-face-cdk:deploy --all --require-approval never`.
+   
+## CfnOutput Descriptions
+
+- `out-api-key`: The API key generated for AWS AppSync. This key can be used for authorization when interacting with the GraphQL API.
+- `out-graphql-url`: The URL for the AWS AppSync GraphQL endpoint. This URL is used to make GraphQL queries and mutations.
+- `out-images-worker-s3-bucket`: The name of the Amazon S3 bucket used to store worker images.
+- `out-images-worker-cdn`: The domain name of the CloudFront distribution used for efficient delivery of worker images.
+
 
 ## Conclusion
 
 This project demonstrates the power of serverless architecture combined with Amazon Rekognition to create an innovative solution for employee time tracking. Feel free to explore and expand upon this project to suit your specific requirements.
-
-For detailed instructions, refer to the README within each stack's directory.
 
