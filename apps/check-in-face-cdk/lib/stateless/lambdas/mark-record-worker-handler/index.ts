@@ -1,6 +1,7 @@
 import { AppSyncResolverHandler } from 'aws-lambda';
 import { searchUserWithFace } from '../../../../src/shared/infrastructure/rekognition/search-user-with-face';
 import {
+  CHECK_IN_FACE_KEYS,
   GeneralFacet,
   buildPKWorkerTimelineWithDateRegister,
   workerEntity,
@@ -74,7 +75,13 @@ export const handler: AppSyncResolverHandler<
 
   const { Items } = await workerTimelineEntity.query(
     buildPKWorkerTimelineWithDateRegister(userFind.User.UserId, dateRegister),
-    { limit: 1, reverse: false }
+    {
+      beginsWith: `${CHECK_IN_FACE_KEYS.day}#${new Date(
+        dateRegister
+      ).getDay()}`,
+      limit: 1,
+      reverse: true,
+    }
   );
 
   const prevDataMarkTimeRecord = Items?.[0];
