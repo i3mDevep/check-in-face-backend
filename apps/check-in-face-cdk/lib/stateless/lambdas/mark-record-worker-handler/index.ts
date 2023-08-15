@@ -1,16 +1,12 @@
 import { AppSyncResolverHandler } from 'aws-lambda';
 import { searchUserWithFace } from '../../../../src/shared/infrastructure/rekognition/search-user-with-face';
 import {
-  CHECK_IN_FACE_KEYS,
   GeneralFacet,
-  buildPKWorkerTimelineWithDateRegister,
   workerEntity,
   workerTimelineEntity,
 } from '../../../../src/shared/infrastructure/persistence';
-import {
-  ErrorCouldNotFindFace,
-  ErrorTracerRegisterType,
-} from '../../../../src/worker/domain/worker-error';
+import { ErrorCouldNotFindFace } from '../../../../src/worker/domain/worker-error';
+import { validateTypeWorker } from './validate-type-worker';
 
 type ResponseWorker = GeneralFacet<typeof workerEntity>;
 
@@ -38,6 +34,12 @@ export const handler: AppSyncResolverHandler<
   if (force) {
     const { Item } = await workerEntity.get({
       identification: imageKey,
+    });
+
+    await validateTypeWorker({
+      id: imageKey,
+      register: dateRegister,
+      type,
     });
 
     await workerTimelineEntity.put({
@@ -73,21 +75,11 @@ export const handler: AppSyncResolverHandler<
 
   if (!Item) throw new ErrorCouldNotFindFace();
 
-  const { Items } = await workerTimelineEntity.query(
-    buildPKWorkerTimelineWithDateRegister(userFind.User.UserId, dateRegister),
-    {
-      beginsWith: `${CHECK_IN_FACE_KEYS.day}#${new Date(
-        dateRegister
-      ).getDay()}`,
-      limit: 1,
-      reverse: true,
-    }
-  );
-
-  const prevDataMarkTimeRecord = Items?.[0];
-
-  if (prevDataMarkTimeRecord && prevDataMarkTimeRecord.type === type)
-    throw new ErrorTracerRegisterType(type);
+  await validateTypeWorker({
+    id: userFind.User.UserId,
+    register: dateRegister,
+    type,
+  });
 
   await workerTimelineEntity.put({
     type,

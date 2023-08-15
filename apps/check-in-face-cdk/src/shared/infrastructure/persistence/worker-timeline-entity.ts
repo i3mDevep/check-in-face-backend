@@ -10,6 +10,13 @@ type ItemsType = Record<any, string>;
 
 const TIME_ZONE_APP = -5;
 
+export const getDateWithTimezone = (dateRegister: string) => {
+  const date = new Date(dateRegister);
+  //ISSUE [1] timezone app it is not fixed
+  date.setHours(date.getHours() + TIME_ZONE_APP);
+  return date;
+};
+
 export const buildPKWorkerTimelineWithDateRegister = (
   identification_: string,
   dateRegister: string

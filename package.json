@@ -21,6 +21,7 @@
     "aws-sdk": "^2.1412.0",
     "axios": "^1.0.0",
     "constructs": "^10.0.0",
+    "date-fns": "^2.30.0",
     "dynamodb-toolbox": "^0.8.5",
     "es-mime-types": "^0.1.4",
     "node-fetch": "^3.3.1",

@@ -7,6 +7,8 @@ import {
 } from '../src/shared/infrastructure/persistence';
 
 import { workerTracerTimeType } from '../src/worker/domain/worker-tracer-time-type';
+// import { validateTypeWorker } from '../lib/stateless/lambdas/mark-record-worker-handler/validate-type-worker';
+import { getTimeWorkedAnalytics } from '../lib/stateless/lambdas/get-time-worked-analytics';
 const { identification, worker, faceId } = CHECK_IN_FACE_KEYS;
 
 const workerMock = {
@@ -160,6 +162,30 @@ describe('checkInFaceShared', () => {
 
       expect(Items?.length).toEqual(1);
       expect(Items?.[0].type).toEqual('out');
+    });
+
+    // it('should get list worker time with interval', async () => {
+    //   const start = ''
+    //   const end = ''
+    //   await workerTimelineEntity.query(
+    //     buildPKWorkerTimelineWithDateRegister(
+    //       workerTimeline[0].identification,
+    //       new Date().toISOString()
+    //     ),
+    //     { limit: 1, reverse: true }
+    //   )
+    // });
+
+    it('should validate validateTypeWorker', async () => {
+      // await getTimeWorkedAnalytics(
+      //   { start: '2023-06-30T10:29:56.066Z', end: '2023-10-15T18:29:56.066Z' },
+      //   { identification: '12345678' }
+      // );
+      // await validateTypeWorker({
+      //   id: '12345678',
+      //   register: '2023-08-15T18:29:56.066Z',
+      //   type: 'in',
+      // });
     });
   });
 });
