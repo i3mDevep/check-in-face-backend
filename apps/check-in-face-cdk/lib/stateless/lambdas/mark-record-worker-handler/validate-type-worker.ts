@@ -1,7 +1,7 @@
 import {
   CHECK_IN_FACE_KEYS,
   buildPKWorkerTimelineWithDateRegister as bpk,
-  getDateWithTimezone,
+  transformDay,
   workerTimelineEntity,
 } from '../../../../src/shared/infrastructure/persistence';
 import {
@@ -21,9 +21,7 @@ export const validateTypeWorker = async ({
   if (new Date(register) > new Date()) throw new ErrorRegisterInvalid(register);
 
   const { Items } = await workerTimelineEntity.query(bpk(id, register), {
-    beginsWith: `${CHECK_IN_FACE_KEYS.day}#${getDateWithTimezone(
-      register
-    ).getDate()}`,
+    beginsWith: `${CHECK_IN_FACE_KEYS.day}#${transformDay(new Date(register))}`,
   });
 
   const buildDto = (type_: string, date: string) => ({

@@ -24,6 +24,7 @@
     "date-fns": "^2.30.0",
     "dynamodb-toolbox": "^0.8.5",
     "es-mime-types": "^0.1.4",
+    "holidayapi": "^6.0.1",
     "node-fetch": "^3.3.1",
     "source-map-support": "^0.5.21",
     "tslib": "^2.3.0",

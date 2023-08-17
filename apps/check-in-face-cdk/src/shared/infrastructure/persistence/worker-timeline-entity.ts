@@ -8,30 +8,23 @@ const { identification, year, date: dateKey, month, day } = CHECK_IN_FACE_KEYS;
 
 type ItemsType = Record<any, string>;
 
-const TIME_ZONE_APP = -5;
-
-export const getDateWithTimezone = (dateRegister: string) => {
-  const date = new Date(dateRegister);
-  //ISSUE [1] timezone app it is not fixed
-  date.setHours(date.getHours() + TIME_ZONE_APP);
-  return date;
-};
-
 export const buildPKWorkerTimelineWithDateRegister = (
   identification_: string,
   dateRegister: string
 ) => {
   const date = new Date(dateRegister);
-  //ISSUE [1] timezone app it is not fixed
-  date.setHours(date.getHours() + TIME_ZONE_APP);
   return `${identification}#${identification_}#${year}#${date.getFullYear()}#${month}#${date.getMonth()}`;
+};
+
+export const transformDay = (date: Date | string | number) => {
+  const dayNumber = date instanceof Date ? date.getDate() : Number(date);
+  return dayNumber < 10 ? `0${dayNumber}` : dayNumber;
 };
 
 export const buildSKWorkerTimelineWithDateRegister = (items: ItemsType) => {
   const date = new Date(items?.dateRegister);
-  //ISSUE [2] timezone app it is not fixed
-  date.setHours(date.getHours() + TIME_ZONE_APP);
-  return `${day}#${date.getDate()}#${dateKey}#${date.getTime()}`;
+
+  return `${day}#${transformDay(date)}#${dateKey}#${date.getTime()}`;
 };
 
 export const buildPKWorkerTimelineWithManual = (

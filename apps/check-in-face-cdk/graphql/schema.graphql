@@ -7,6 +7,43 @@ type Worker {
   entity: String
 }
 
+type MinutesFormatter {
+  hours: Int
+  minutes: Int
+}
+
+type PositionInterval {
+  top: Float
+  height: Float
+}
+
+type IntervalWorkerTime {
+  start: String
+  end: ID
+  minutes: Int
+  minutesFormatter: MinutesFormatter
+  position: PositionInterval
+}
+
+type PaymentValuesSurcharges {
+  paymentHoursExtra: Float
+  paymentHoursNight: Float
+}
+
+type PaymentValues {
+  paymentHoursBasic: Float
+  surcharges: PaymentValuesSurcharges
+}
+
+type PaymentWorkerTime {
+  day: String
+  hoursWorked: Float
+  hoursWorkedBasic: Float
+  hoursWorkedExtra: Float
+  hoursNight: Float
+  payment: PaymentValues
+}
+
 type WorkerImage {
   pathFaceInCollection: String
   identification: String
@@ -50,6 +87,12 @@ input WorkerInput {
   isPatch: Boolean
 }
 
+input IntervalWorkerTimeQueryInput {
+  identification: ID!
+  start: String!
+  end: String!
+}
+
 input DisassociateWorkerImagesInput {
   identification: ID!
   faceIds: [String]
@@ -67,6 +110,12 @@ type Query {
   getListWorkerMarkTime(query: WorkerMarkTimeQuery!): [WorkerMarkTime]
   getWorkerImages(identification: ID!): [WorkerImage]
   getDetailWorker(identification: ID!): Worker
+  generateWorkerPayment(
+    query: IntervalWorkerTimeQueryInput!
+  ): [PaymentWorkerTime]
+  getWorkerIntervalsTime(
+    query: IntervalWorkerTimeQueryInput!
+  ): [IntervalWorkerTime]
   getListWorker: [Worker]
 }
 

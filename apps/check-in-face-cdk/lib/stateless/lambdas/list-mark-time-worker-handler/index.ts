@@ -4,6 +4,7 @@ import {
   CHECK_IN_FACE_KEYS,
   GeneralFacet,
   buildPKWorkerTimelineWithManual,
+  transformDay,
 } from '../../../../src/shared/infrastructure/persistence';
 
 const { day: dayKey } = CHECK_IN_FACE_KEYS;
@@ -26,8 +27,9 @@ export const handler: AppSyncResolverHandler<
   const { identification, month, year, day, limit, reverse } =
     event.arguments.query;
   try {
-    const options = day ? { beginsWith: `${dayKey}#${day}` } : undefined;
-
+    const options = day
+      ? { beginsWith: `${dayKey}#${transformDay(day)}` }
+      : undefined;
     const { Items } = await workerTimelineEntity.query(
       buildPKWorkerTimelineWithManual(identification, year, month),
       { ...options, reverse: reverse ?? true, limit }

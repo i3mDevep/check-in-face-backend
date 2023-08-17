@@ -42,6 +42,7 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
       CF_COLLECTION_ID: collectionWorkerFaces.collectionId,
       CF_COLLECTION_ARN: collectionWorkerFaces.attrArn,
       CF_LOAD_IMAGES_WORKER_BUCKET_NAME: imagesWorkerS3.bucketName,
+      TZ: 'America/Bogota',
     };
 
     this.builderId = props.builderId;
@@ -117,6 +118,20 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
       stage,
     });
 
+    const lambdaIntervalWorkerTime = this.createLambdaNodeJSBase({
+      functionName: 'get-worker-intervals-time',
+      routePath: 'lambdas/get-worker-intervals-time/index.js',
+      environment: commonEnvironment,
+      stage,
+    });
+
+    const lambdaGeneratePaymentWorker = this.createLambdaNodeJSBase({
+      functionName: 'generate-payment-worker',
+      routePath: 'lambdas/generate-payment-worker/index.js',
+      environment: commonEnvironment,
+      stage,
+    });
+
     // Permission //
 
     imagesWorkerS3.grantReadWrite(lambdaMarkRecordWorker);
@@ -128,6 +143,8 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
     tableCheckInFace.grantReadWriteData(lambdaListWorker);
     tableCheckInFace.grantReadWriteData(lambdaListWorkerImages);
     tableCheckInFace.grantReadData(lambdaDetailWorker);
+    tableCheckInFace.grantReadData(lambdaIntervalWorkerTime);
+    tableCheckInFace.grantReadData(lambdaGeneratePaymentWorker);
 
     lambdaCreateWorker.addToRolePolicy(
       new iam.PolicyStatement({
@@ -154,6 +171,18 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
     );
 
     // Resolvers //
+
+    this.createLambdaResolver({
+      id: 'generate-payment-worker',
+      lambdaHandler: lambdaGeneratePaymentWorker,
+      resolverProps: { typeName: 'Query', fieldName: 'generateWorkerPayment' },
+    });
+
+    this.createLambdaResolver({
+      id: 'get-worker-intervals-time',
+      lambdaHandler: lambdaIntervalWorkerTime,
+      resolverProps: { typeName: 'Query', fieldName: 'getWorkerIntervalsTime' },
+    });
 
     this.createLambdaResolver({
       id: 'list-worker-images',
