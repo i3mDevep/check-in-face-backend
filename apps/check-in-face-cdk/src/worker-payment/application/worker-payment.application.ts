@@ -9,7 +9,10 @@ import {
   ParamsIntervalTime,
 } from '../../worker-time/domain/dto/intervals-time.dto';
 import { calculatePaymentWorker } from '../domain/services/calculate-payment-worker';
-import { ErrorIntervalDate } from '../domain/worker-payment.error';
+import {
+  ErrorIntervalDate,
+  ErrorPaymentUndefine,
+} from '../domain/worker-payment.error';
 import { generatePaymentResponseDto } from './dto/generate-payment-response';
 
 export const workerPaymentApplications = (
@@ -27,6 +30,9 @@ export const workerPaymentApplications = (
         throw new ErrorIntervalDate();
 
       const paymentTemplate = await repositoryPayment.get();
+
+      if (!paymentTemplate) throw new ErrorPaymentUndefine();
+
       const workerRegistersGroup = await getWorkerTimeAndGroupByDay(
         repositoryWorkerTimeInterval
       )(params);

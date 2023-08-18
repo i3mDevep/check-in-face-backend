@@ -106,7 +106,40 @@ input MarkRecordWorkerInput {
   force: Boolean
 }
 
+input IntervalNonNightInput {
+  since: Int
+  until: Int
+}
+
+type IntervalNonNightType {
+  since: Int
+  until: Int
+}
+
+input TemplatePaymentInput {
+  baseHourDay: Float
+  baseHourHoliday: Float
+  hoursMinimum: Float
+  extraHourNormalDay: Float
+  extraHourHoliday: Float
+  nocturnHourNormalDay: Float
+  nocturnHourHoliday: Float
+  intervalNonNight: IntervalNonNightInput
+}
+
+type TemplatePaymentType {
+  baseHourDay: Float
+  baseHourHoliday: Float
+  hoursMinimum: Float
+  extraHourNormalDay: Float
+  extraHourHoliday: Float
+  nocturnHourNormalDay: Float
+  nocturnHourHoliday: Float
+  intervalNonNight: IntervalNonNightType
+}
+
 type Query {
+  getPaymentTemplate: TemplatePaymentType
   getListWorkerMarkTime(query: WorkerMarkTimeQuery!): [WorkerMarkTime]
   getWorkerImages(identification: ID!): [WorkerImage]
   getDetailWorker(identification: ID!): Worker
@@ -123,6 +156,7 @@ type Mutation {
   putWorker(props: WorkerInput): Boolean
   disassociateWorkerImages(props: DisassociateWorkerImagesInput): Boolean
   markRecordWorker(props: MarkRecordWorkerInput): Worker
+  putTemplatePayment(props: TemplatePaymentInput): Boolean
 }
 
 schema {

@@ -1,18 +1,12 @@
+import { paymentEntity } from '../../shared/infrastructure/persistence';
 import { CreateTemplatePaymentRepository } from '../domain/create-template-payment.repository';
 import { GetTemplatePaymentRepository } from '../domain/get-template-payment.repository';
+import { WorkerPaymentEntity } from '../domain/worker-payment.entity';
 
 export const workerPaymentOperations: CreateTemplatePaymentRepository &
   GetTemplatePaymentRepository = {
-  create: () => Promise.resolve(),
-  get: () =>
-    Promise.resolve({
-      baseHourDay: 1000,
-      baseHourHoliday: 1500,
-      extraHourNormalDay: 1,
-      extraHourHoliday: 2,
-      nocturnHourNormalDay: 3,
-      nocturnHourHoliday: 5,
-      hoursMinimum: 8,
-      intervalNonNight: { since: 0, until: 9 },
-    }),
+  create: async (props: WorkerPaymentEntity) => {
+    await paymentEntity.put(props);
+  },
+  get: async () => (await paymentEntity.get({})).Item,
 };

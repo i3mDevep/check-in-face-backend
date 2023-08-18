@@ -4,3 +4,10 @@ export class ErrorIntervalDate extends Error {
     this.name = 'ErrorIntervalDate';
   }
 }
+
+export class ErrorPaymentUndefine extends Error {
+  constructor() {
+    super(`you need create a payment template`);
+    this.name = 'ErrorPaymentUndefine';
+  }
+}

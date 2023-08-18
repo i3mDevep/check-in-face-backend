@@ -4,10 +4,22 @@ import {
   workerTimelineEntity,
   CHECK_IN_FACE_KEYS,
   buildPKWorkerTimelineWithDateRegister,
+  paymentEntity,
 } from '../src/shared/infrastructure/persistence';
 
 import { workerTracerTimeType } from '../src/worker-time/domain/worker-tracer-time.type';
 const { identification, worker, faceId } = CHECK_IN_FACE_KEYS;
+
+const paymentEntityMock = {
+  baseHourDay: 1000,
+  baseHourHoliday: 1500,
+  extraHourNormalDay: 1,
+  extraHourHoliday: 2,
+  nocturnHourNormalDay: 3,
+  nocturnHourHoliday: 5,
+  hoursMinimum: 8,
+  intervalNonNight: { since: 0, until: 60 * 6 },
+};
 
 const workerMock = {
   fullName: 'User Mock',
@@ -160,6 +172,11 @@ describe('checkInFaceShared', () => {
 
       expect(Items?.length).toEqual(1);
       expect(Items?.[0].type).toEqual('out');
+    });
+  });
+  describe('payment test', () => {
+    it('create payment template', async () => {
+      await paymentEntity.put(paymentEntityMock);
     });
   });
 });

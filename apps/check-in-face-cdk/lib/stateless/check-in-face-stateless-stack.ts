@@ -132,7 +132,21 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
       stage,
     });
 
-    // Permission //
+    const lambdaCreatePaymentTemplate = this.createLambdaNodeJSBase({
+      functionName: 'create-payment-template',
+      routePath: 'lambdas/create-payment-template/index.js',
+      environment: commonEnvironment,
+      stage,
+    });
+
+    const lambdaGetPaymentTemplate = this.createLambdaNodeJSBase({
+      functionName: 'get-payment-template',
+      routePath: 'lambdas/get-payment-template/index.js',
+      environment: commonEnvironment,
+      stage,
+    });
+
+    // Permissions //
 
     imagesWorkerS3.grantReadWrite(lambdaMarkRecordWorker);
 
@@ -142,9 +156,13 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
     tableCheckInFace.grantReadWriteData(lambdaCreateWorker);
     tableCheckInFace.grantReadWriteData(lambdaListWorker);
     tableCheckInFace.grantReadWriteData(lambdaListWorkerImages);
+
     tableCheckInFace.grantReadData(lambdaDetailWorker);
     tableCheckInFace.grantReadData(lambdaIntervalWorkerTime);
     tableCheckInFace.grantReadData(lambdaGeneratePaymentWorker);
+    tableCheckInFace.grantReadData(lambdaGetPaymentTemplate);
+
+    tableCheckInFace.grantWriteData(lambdaCreatePaymentTemplate);
 
     lambdaCreateWorker.addToRolePolicy(
       new iam.PolicyStatement({
@@ -171,6 +189,12 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
     );
 
     // Resolvers //
+
+    this.createLambdaResolver({
+      id: 'get-payment-template',
+      lambdaHandler: lambdaGetPaymentTemplate,
+      resolverProps: { typeName: 'Query', fieldName: 'getPaymentTemplate' },
+    });
 
     this.createLambdaResolver({
       id: 'generate-payment-worker',
@@ -200,6 +224,14 @@ export class CheckInFaceStatelessStack extends cdk.Stack {
       id: 'get-list-worker',
       lambdaHandler: lambdaListWorker,
       resolverProps: { typeName: 'Query', fieldName: 'getListWorker' },
+    });
+
+    // mutations //
+
+    this.createLambdaResolver({
+      id: 'create-payment-template',
+      lambdaHandler: lambdaCreatePaymentTemplate,
+      resolverProps: { typeName: 'Mutation', fieldName: 'putTemplatePayment' },
     });
 
     this.createLambdaResolver({
