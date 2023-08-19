@@ -6,11 +6,6 @@ export const getWorkerTimeAndGroupByDay =
   (repository: WorkerTimeIntervalRepository) =>
   async (query: ParamsIntervalTime) => {
     const workerRegisters = await repository.getAnalyticsTimeTracking(query);
-    console.log(
-      '🚀 ~ file: get-worker-time-and-group-by-day.ts:9 ~ workerRegisters:',
-      workerRegisters
-    );
-
     workerRegisters.sort(
       (a, b) =>
         new Date(a?.dateRegister as string).getTime() -

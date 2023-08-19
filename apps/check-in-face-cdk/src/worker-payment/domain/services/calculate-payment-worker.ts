@@ -8,7 +8,10 @@ export const calculatePaymentWorker = (
   paymentTemplate: WorkerPaymentEntity,
   holidays: number[]
 ) => {
-  return Array.from(props).reduce((prev, [key, intervals]) => {
+  const convertMapDayToArray = Array.from(props);
+  const totalDays = convertMapDayToArray.length;
+
+  return convertMapDayToArray.reduce((prev, [key, intervals]) => {
     const {
       hoursMinimum,
       baseHourDay,
@@ -20,6 +23,8 @@ export const calculatePaymentWorker = (
       intervalNonNight: { since, until },
     } = paymentTemplate;
     const [day, month, year] = key.split('#');
+
+    const averageHoursPerDay = hoursMinimum / totalDays;
 
     const costHours = holidays.includes(Number(day))
       ? {
@@ -49,8 +54,8 @@ export const calculatePaymentWorker = (
         return prev + hoursNightInterval;
       }, 0) / 60;
 
-    const hoursWorkedBasic = Math.min(hoursMinimum, hoursWorked);
-    const hoursWorkedExtra = Math.max(0, hoursWorked - hoursMinimum);
+    const hoursWorkedBasic = Math.min(averageHoursPerDay, hoursWorked);
+    const hoursWorkedExtra = Math.max(0, hoursWorked - averageHoursPerDay);
 
     const data = {
       [`${day}/${month}/${year}`]: {

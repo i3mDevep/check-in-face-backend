@@ -179,4 +179,121 @@ describe('checkInFaceShared', () => {
       await paymentEntity.put(paymentEntityMock);
     });
   });
+
+  describe('work time mock example by calculate payment', () => {
+    it('inject date', async () => {
+      const identificationMock = '12345678';
+      const reason = 'test sapo perro';
+      const picture = '';
+
+      const buildItem = (props: {
+        dateRegister: Date;
+        type: workerTracerTimeType;
+      }) => {
+        // props.dateRegister.setHours(props.dateRegister.getHours() - 5);
+
+        return {
+          dateRegister: props.dateRegister.toISOString(),
+          type: props.type,
+          identification: identificationMock,
+          reason,
+          picture,
+        };
+      };
+
+      const dataMocksTimes: {
+        dateRegister: string;
+        identification: string;
+        reason: string;
+        picture: string;
+        type: workerTracerTimeType;
+      }[] = [
+        // one day
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 20, 4, 30),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 20, 14, 4),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 20, 14, 24),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 20, 19, 5),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+        // second day
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 21, 7, 0),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 21, 17, 20),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+        // three day
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 22, 6, 40),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 22, 19, 30),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+        // four day
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 23, 2, 50),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 23, 12, 30),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+        // five day
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 24, 7, 0),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 24, 18, 27),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+      ];
+
+      await Promise.all(
+        dataMocksTimes.map((item) => workerTimelineEntity.put(item))
+      );
+
+      // await Promise.all(
+      //   dataMocksTimes.map((item) => workerTimelineEntity.delete(item))
+      // );
+    });
+  });
 });
