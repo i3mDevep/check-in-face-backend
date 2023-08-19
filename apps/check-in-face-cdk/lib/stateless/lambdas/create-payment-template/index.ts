@@ -17,8 +17,11 @@ export const handler: AppSyncResolverHandler<
   boolean
 > = async (event) => {
   const { props } = event.arguments;
-  return !!workerPaymentApplications(
+
+  await workerPaymentApplications(
     workerPaymentOperations,
     workerTimeAnalyticsInterval
   ).create(props);
+
+  return true;
 };
