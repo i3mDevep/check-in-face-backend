@@ -10,6 +10,7 @@ export const handler: AppSyncResolverHandler<
       identification: string;
       start: string;
       end: string;
+      holidays: number[];
     };
   },
   (GeneratePaymentWorkerResponse[''] & { day: string })[]

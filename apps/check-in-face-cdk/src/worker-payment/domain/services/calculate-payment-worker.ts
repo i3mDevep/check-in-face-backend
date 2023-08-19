@@ -5,17 +5,33 @@ import { calculateHoursNight } from './calculate-hours-night';
 
 export const calculatePaymentWorker = (
   props: GeneratePaymentHours,
-  paymentTemplate: WorkerPaymentEntity
+  paymentTemplate: WorkerPaymentEntity,
+  holidays: number[]
 ) => {
   return Array.from(props).reduce((prev, [key, intervals]) => {
     const {
       hoursMinimum,
       baseHourDay,
+      baseHourHoliday,
+      extraHourHoliday,
+      nocturnHourHoliday,
       extraHourNormalDay,
       nocturnHourNormalDay,
       intervalNonNight: { since, until },
     } = paymentTemplate;
     const [day, month, year] = key.split('#');
+
+    const costHours = holidays.includes(Number(day))
+      ? {
+          costHourBase: baseHourHoliday,
+          costHourExtra: extraHourHoliday,
+          costHourNigh: nocturnHourHoliday,
+        }
+      : {
+          costHourBase: baseHourDay,
+          costHourExtra: extraHourNormalDay,
+          costHourNigh: nocturnHourNormalDay,
+        };
 
     const hoursWorked =
       intervals.reduce((acc, entry) => acc + entry.minutes, 0) / 60;
@@ -43,10 +59,10 @@ export const calculatePaymentWorker = (
         hoursWorkedBasic,
         hoursWorkedExtra,
         payment: {
-          paymentHoursBasic: hoursWorkedBasic * baseHourDay,
+          paymentHoursBasic: hoursWorkedBasic * costHours.costHourBase,
           surcharges: {
-            paymentHoursExtra: hoursWorkedExtra * extraHourNormalDay,
-            paymentHoursNight: hoursNight * nocturnHourNormalDay,
+            paymentHoursExtra: hoursWorkedExtra * costHours.costHourExtra,
+            paymentHoursNight: hoursNight * costHours.costHourNigh,
           },
         },
       },

@@ -93,6 +93,13 @@ input IntervalWorkerTimeQueryInput {
   end: String!
 }
 
+input GenerateWorkerPaymentQueryInput {
+  identification: ID!
+  start: String!
+  end: String!
+  holidays: [Int]
+}
+
 input DisassociateWorkerImagesInput {
   identification: ID!
   faceIds: [String]
@@ -144,7 +151,7 @@ type Query {
   getWorkerImages(identification: ID!): [WorkerImage]
   getDetailWorker(identification: ID!): Worker
   generateWorkerPayment(
-    query: IntervalWorkerTimeQueryInput!
+    query: GenerateWorkerPaymentQueryInput!
   ): [PaymentWorkerTime]
   getWorkerIntervalsTime(
     query: IntervalWorkerTimeQueryInput!
