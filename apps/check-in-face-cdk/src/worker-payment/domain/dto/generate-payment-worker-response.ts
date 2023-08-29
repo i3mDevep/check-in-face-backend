@@ -1,15 +1,20 @@
 export interface GeneratePaymentWorkerResponse {
-  [date: string]: {
-    hoursWorked: number;
+  totalizer: {
+    hoursWorkedTotal: number;
     hoursWorkedBasic: number;
-    hoursWorkedExtra: number;
-    hoursNight: number;
-    payment: {
-      paymentHoursBasic: number;
-      surcharges: {
-        paymentHoursExtra: number;
-        paymentHoursNight: number;
-      };
+    hoursWorkedExtraBasic: number;
+    hoursWorkedBasicHoliday: number;
+    hoursWorkedExtraHoliday: number;
+    hoursNightHoliday: number;
+    hoursNightBasic: number;
+  };
+  payment: {
+    paymentHoursBasic: number;
+    surcharges: {
+      paymentHoursExtra: number;
+      paymentHoursNight: number;
+      paymentHoursExtraHoliday: number;
+      paymentHoursNightHoliday: number;
     };
   };
 }

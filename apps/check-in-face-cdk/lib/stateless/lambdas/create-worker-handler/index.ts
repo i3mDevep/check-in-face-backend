@@ -7,6 +7,7 @@ type CreateWorkerInput = {
     fullName: string;
     identification: string;
     profilePath?: string;
+    scheduleWeek?: string[];
     isPatch?: boolean;
   };
 };

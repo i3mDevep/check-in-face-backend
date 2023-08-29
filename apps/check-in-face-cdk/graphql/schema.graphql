@@ -5,6 +5,7 @@ type Worker {
   created: String
   modified: String
   entity: String
+  scheduleWeek: [String]
 }
 
 type MinutesFormatter {
@@ -25,23 +26,33 @@ type IntervalWorkerTime {
   position: PositionInterval
 }
 
-type PaymentValuesSurcharges {
-  paymentHoursExtra: Float
-  paymentHoursNight: Float
+type PaymentWorkerTimeDetailsRegister {
+  start: String
+  end: String
 }
 
-type PaymentValues {
+type PaymentWorkerTimeDetails {
+  day: String
+  hoursWorkedTotal: Float
+  hoursNight: Float
+  registers: [PaymentWorkerTimeDetailsRegister]
+}
+
+type PaymentWorkerSurcharges {
+  paymentHoursExtra: Float
+  paymentHoursNight: Float
+  paymentHoursExtraHoliday: Float
+  paymentHoursNightHoliday: Float
+}
+
+type PaymentWorkerValues {
   paymentHoursBasic: Float
-  surcharges: PaymentValuesSurcharges
+  surcharges: PaymentWorkerSurcharges
 }
 
 type PaymentWorkerTime {
-  day: String
-  hoursWorked: Float
-  hoursWorkedBasic: Float
-  hoursWorkedExtra: Float
-  hoursNight: Float
-  payment: PaymentValues
+  details: [PaymentWorkerTimeDetails]
+  payment: PaymentWorkerValues
 }
 
 type WorkerImage {
@@ -85,6 +96,7 @@ input WorkerInput {
   identification: ID!
   profilePath: String
   isPatch: Boolean
+  scheduleWeek: [String]
 }
 
 input IntervalWorkerTimeQueryInput {
@@ -152,7 +164,7 @@ type Query {
   getDetailWorker(identification: ID!): Worker
   generateWorkerPayment(
     query: GenerateWorkerPaymentQueryInput!
-  ): [PaymentWorkerTime]
+  ): PaymentWorkerTime
   getWorkerIntervalsTime(
     query: IntervalWorkerTimeQueryInput!
   ): [IntervalWorkerTime]

@@ -29,6 +29,7 @@ export const generateWorkerEntity = <T extends Table<string, 'pk', 'sk'>>(
       fullName: { type: 'string', required: true },
       identification: { type: 'string', required: true },
       profilePath: { type: 'string', required: false },
+      scheduleWeek: { type: 'list', required: false, default: [] },
       info: { type: 'map', required: false, default: {} },
     },
     table,

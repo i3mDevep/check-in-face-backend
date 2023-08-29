@@ -18,7 +18,11 @@ export const validateTypeWorker = async ({
   register: string;
   type: string;
 }) => {
-  if (new Date(register) > new Date()) throw new ErrorRegisterInvalid(register);
+  const currentDate = new Date();
+  currentDate.setTime(currentDate.getTime() + 2 * 60 * 1000);
+
+  if (new Date(register) > currentDate)
+    throw new ErrorRegisterInvalid(register);
 
   const { Items } = await workerTimelineEntity.query(bpk(id, register), {
     beginsWith: `${CHECK_IN_FACE_KEYS.day}#${transformDay(new Date(register))}`,

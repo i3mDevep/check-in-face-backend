@@ -25,6 +25,7 @@ const workerMock = {
   fullName: 'User Mock',
   identification: 'identification_mock_fake',
   info: { email: 'mocker@gmail.com' },
+  scheduleWeek: ['Monday 1 Hours', 'Saturday 3 Hours'],
 };
 
 const workerImage = {
@@ -282,6 +283,160 @@ describe('checkInFaceShared', () => {
         {
           ...buildItem({
             dateRegister: new Date(2023, 7, 24, 18, 27),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+      ];
+
+      await Promise.all(
+        dataMocksTimes.map((item) => workerTimelineEntity.put(item))
+      );
+
+      // await Promise.all(
+      //   dataMocksTimes.map((item) => workerTimelineEntity.delete(item))
+      // );
+    });
+
+    //Natalia day 2
+
+    it('inject date 2', async () => {
+      const identificationMock = '12323222';
+      const reason = 'test sapo perro 2';
+      const picture = '';
+
+      const buildItem = (props: {
+        dateRegister: Date;
+        type: workerTracerTimeType;
+      }) => {
+        // props.dateRegister.setHours(props.dateRegister.getHours() - 5);
+
+        return {
+          dateRegister: props.dateRegister.toISOString(),
+          type: props.type,
+          identification: identificationMock,
+          reason,
+          picture,
+        };
+      };
+
+      const dataMocksTimes: {
+        dateRegister: string;
+        identification: string;
+        reason: string;
+        picture: string;
+        type: workerTracerTimeType;
+      }[] = [
+        // one day
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 20, 4, 30),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 20, 19, 18),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+        // second day
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 21, 7, 0),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 21, 16, 0),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 21, 16, 10),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 21, 18, 42),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+        // three day
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 22, 5, 30),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 22, 13, 53),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 22, 14, 12),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 22, 19, 54),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+        // four day
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 23, 7, 45),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 23, 18, 30),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+        // five day
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 24, 2, 50),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 24, 13, 6),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+        // six day
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 25, 7, 56),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 25, 14, 10),
+            type: workerTracerTimeType.OUT,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 25, 14, 23),
+            type: workerTracerTimeType.IN,
+          }),
+        },
+        {
+          ...buildItem({
+            dateRegister: new Date(2023, 7, 25, 17, 54),
             type: workerTracerTimeType.OUT,
           }),
         },

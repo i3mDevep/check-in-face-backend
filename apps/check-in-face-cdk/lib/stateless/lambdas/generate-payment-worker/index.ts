@@ -2,7 +2,7 @@ import { AppSyncResolverHandler } from 'aws-lambda';
 import { workerTimeAnalyticsInterval } from '../../../../src/worker-time/infrastructure/worker-time-analytics-interval';
 import { workerPaymentApplications } from '../../../../src/worker-payment/application/worker-payment.application';
 import { workerPaymentOperations } from '../../../../src/worker-payment/infrastructure/worker-payment-operations';
-import { GeneratePaymentWorkerResponse } from '../../../../src/worker-payment/domain/dto/generate-payment-worker-response';
+import { GenerateResponseDto } from '../../../../src/worker-payment/application/dto/generate-payment-response';
 
 export const handler: AppSyncResolverHandler<
   {
@@ -13,7 +13,7 @@ export const handler: AppSyncResolverHandler<
       holidays: number[];
     };
   },
-  (GeneratePaymentWorkerResponse[''] & { day: string })[]
+  GenerateResponseDto
 > = async (event) => {
   const query = event.arguments.query;
   return workerPaymentApplications(
