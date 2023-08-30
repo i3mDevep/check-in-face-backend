@@ -8,10 +8,10 @@ export interface GenerateResponseDto {
 export const generatePaymentResponseDto = (
   data: GeneratePaymentWorkerResponse
 ): GenerateResponseDto => {
-  const detailArray = Object.entries(data.detail).map(([key, value]) => {
+  const { detail, ...rest } = data;
+  const detailArray = Object.entries(detail).map(([key, value]) => {
     const [day] = key.split('/');
     return { ...value, day };
   });
-
-  return { details: detailArray, payment: data.payment };
+  return { ...rest, details: detailArray };
 };

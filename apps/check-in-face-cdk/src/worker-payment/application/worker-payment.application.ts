@@ -24,9 +24,11 @@ export const workerPaymentApplications = (
     get: () => repositoryPayment.get(),
     create: (props: WorkerPaymentEntity) => repositoryPayment.create(props),
     generatePaymentWorker: async (
-      params: ParamsIntervalTime & { holidays: number[] }
+      params: ParamsIntervalTime & { holidays: number[] } & {
+        scheduleWeek: string[];
+      }
     ) => {
-      const { end, start, holidays } = params;
+      const { end, start, holidays, scheduleWeek } = params;
 
       if (new Date(end).getMonth() !== new Date(start).getMonth())
         throw new ErrorIntervalDate();
@@ -51,7 +53,8 @@ export const workerPaymentApplications = (
         calculatePaymentWorker(
           intervalRegisterGroupByDay,
           paymentTemplate,
-          holidays
+          holidays,
+          scheduleWeek
         )
       );
     },

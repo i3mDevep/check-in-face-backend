@@ -11,6 +11,7 @@ export const handler: AppSyncResolverHandler<
       start: string;
       end: string;
       holidays: number[];
+      scheduleWeek: string[];
     };
   },
   GenerateResponseDto
@@ -19,5 +20,5 @@ export const handler: AppSyncResolverHandler<
   return workerPaymentApplications(
     workerPaymentOperations,
     workerTimeAnalyticsInterval
-  ).generatePaymentWorker(query);
+  ).generatePaymentWorker({ ...query });
 };

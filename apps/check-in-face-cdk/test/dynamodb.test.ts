@@ -300,7 +300,7 @@ describe('checkInFaceShared', () => {
     //Natalia day 2
 
     it('inject date 2', async () => {
-      const identificationMock = '12323222';
+      const identificationMock = '12312';
       const reason = 'test sapo perro 2';
       const picture = '';
 

@@ -1,4 +1,9 @@
 export interface GeneratePaymentWorkerResponse {
+  detail: {
+    [date: string]: {
+      registers: { start: Date; end: Date }[];
+    };
+  };
   totalizer: {
     hoursWorkedTotal: number;
     hoursWorkedBasic: number;
