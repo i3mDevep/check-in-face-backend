@@ -105,9 +105,7 @@ export const calculatePaymentWorker = (
           }
         : {
             hoursWorkedBasic:
-              prev.hoursWorkedBasic +
-              prev.hoursWorkedBasicHoliday +
-              getHoursBasic(hoursWorkedTotalToday),
+              prev.hoursWorkedBasic + getHoursBasic(hoursWorkedTotalToday),
           };
 
       return {
@@ -132,6 +130,12 @@ export const calculatePaymentWorker = (
     }
   );
 
+  Object.assign(totalizerHoursWorked, {
+    hoursWorkedBasic:
+      totalizerHoursWorked.hoursWorkedBasic +
+      totalizerHoursWorked.hoursWorkedBasicHoliday,
+  });
+
   const { detail, ...rest } = totalizerHoursWorked;
 
   const payment: GeneratePaymentWorkerResponse['payment'] = {
@@ -145,6 +149,7 @@ export const calculatePaymentWorker = (
       paymentHoursNight: rest.hoursNightBasic * nocturnHourNormalDay,
     },
   };
+
   return {
     detail,
     payment,
