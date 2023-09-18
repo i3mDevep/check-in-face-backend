@@ -24,8 +24,8 @@ export const documentClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({ region: process.env['AWS_REGION'] }),
   translateConfig
 );
-
+// OPEN - ISSUE[NAME-TABLE] = must be dynamic
 export const checkInFaceTable = generateCheckInFaceTable(
-  'check-in-face-table-dev',
+  'check-in-face-table-prod',
   documentClient
 );
