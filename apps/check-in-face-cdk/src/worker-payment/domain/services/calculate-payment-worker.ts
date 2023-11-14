@@ -73,14 +73,12 @@ export const calculatePaymentWorker = (
           return prev + hoursNightInterval;
         }, 0) / 60;
 
-      const getHoursBasic = (hours: number) =>
-        Math.min(
-          schedulesParse.find((s) => s.scheduleDay === getDay(refDate))
-            ?.scheduleHours ?? 0,
-          hours
-        );
-      const getHoursExtra = (hours: number) =>
-        Math.max(0, hours - getHoursBasic(hours));
+      const hoursShouldWork =
+        schedulesParse.find((s) => s.scheduleDay === getDay(refDate))
+          ?.scheduleHours ?? 0;
+
+      const getHoursBasic = (hours: number) => Math.min(hoursShouldWork, hours);
+      const getHoursExtra = (hours: number) => hours - hoursShouldWork;
 
       const hoursExtraGeneral = isHoliday
         ? {
