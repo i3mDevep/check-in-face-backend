@@ -37,6 +37,7 @@ type PaymentWorkerTimeDetails {
 }
 
 type PaymentWorkerSurcharges {
+  paymentHoursBasicHoliday: Float
   paymentHoursNightHoliday: Float
   paymentHoursExtraHoliday: Float
   paymentHoursExtra: Float

@@ -16,6 +16,7 @@ export interface GeneratePaymentWorkerResponse {
   payment: {
     paymentHoursBasic: number;
     surcharges: {
+      paymentHoursBasicHoliday: number;
       paymentHoursExtra: number;
       paymentHoursNight: number;
       paymentHoursExtraHoliday: number;

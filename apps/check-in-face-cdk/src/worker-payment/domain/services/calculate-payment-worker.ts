@@ -137,10 +137,9 @@ export const calculatePaymentWorker = (
   const { detail, ...rest } = totalizerHoursWorked;
 
   const payment: GeneratePaymentWorkerResponse['payment'] = {
-    paymentHoursBasic:
-      rest.hoursWorkedBasic * baseHourDay +
-      rest.hoursWorkedBasicHoliday * baseHourHoliday,
+    paymentHoursBasic: rest.hoursWorkedBasic * baseHourDay,
     surcharges: {
+      paymentHoursBasicHoliday: rest.hoursWorkedBasicHoliday * baseHourHoliday,
       paymentHoursNightHoliday: rest.hoursNightHoliday * nocturnHourHoliday,
       paymentHoursExtraHoliday: rest.hoursWorkedExtraHoliday * extraHourHoliday,
       paymentHoursExtra: rest.hoursWorkedExtraBasic * extraHourNormalDay,
